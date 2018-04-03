@@ -1,8 +1,8 @@
 package flyline
 
 import (
-	"runtime"
 	"sync/atomic"
+	"runtime"
 	"time"
 )
 
@@ -30,12 +30,11 @@ func (s *Sequence) Incr() (value int64) {
 			break
 		}
 		tryIncrTimes--
+		time.Sleep(100 * time.Microsecond)
 		if tryIncrTimes < 0 {
 			tryIncrTimes = 10
-			time.Sleep(100 * time.Microsecond)
-			continue
+			runtime.Gosched()
 		}
-		runtime.Gosched()
 	}
 	return
 }

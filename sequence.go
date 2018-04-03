@@ -21,7 +21,7 @@ type Sequence struct {
 
 // Atomic increment, if 5 times failed, then call runtime.Gosched().
 func (s *Sequence) Incr() (value int64) {
-	tryIncrTimes := 5
+	tryIncrTimes := 10
 	for {
 		nextValue := s.Get() + 1
 		ok := atomic.CompareAndSwapInt64(&s.value, s.value, nextValue)
@@ -31,6 +31,7 @@ func (s *Sequence) Incr() (value int64) {
 		}
 		tryIncrTimes--
 		if tryIncrTimes < 0 {
+			tryIncrTimes = 10
 			time.Sleep(100 * time.Microsecond)
 			continue
 		}

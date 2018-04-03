@@ -21,18 +21,21 @@ type Sequence struct {
 
 // Atomic increment, if 5 times failed, then call runtime.Gosched().
 func (s *Sequence) Incr() (value int64) {
-	incrTimes := 0
-	nextValue := s.Get() + 1
-	ok := atomic.CompareAndSwapInt64(&s.value, s.value, nextValue)
-	for !ok {
-		incrTimes++
-		if incrTimes < 5 {
+	tryIncrTimes := 5
+	for {
+		nextValue := s.Get() + 1
+		ok := atomic.CompareAndSwapInt64(&s.value, s.value, nextValue)
+		if ok {
+			value = nextValue
+			break
+		}
+		tryIncrTimes--
+		if tryIncrTimes < 0 {
 			time.Sleep(100 * time.Microsecond)
 			continue
 		}
 		runtime.Gosched()
 	}
-	value = nextValue
 	return
 }
 

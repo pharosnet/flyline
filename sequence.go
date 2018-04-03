@@ -23,13 +23,13 @@ type Sequence struct {
 func (s *Sequence) Incr() (value int64) {
 	tryIncrTimes := 10
 	for {
+		tryIncrTimes--
 		nextValue := s.Get() + 1
 		ok := atomic.CompareAndSwapInt64(&s.value, s.value, nextValue)
 		if ok {
 			value = nextValue
 			break
 		}
-		tryIncrTimes--
 		time.Sleep(100 * time.Microsecond)
 		if tryIncrTimes < 0 {
 			tryIncrTimes = 10

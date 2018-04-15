@@ -3,7 +3,6 @@ package flyline
 import (
 	"sync/atomic"
 	"runtime"
-	"time"
 )
 
 // Sequence New Function, value starts from -1.
@@ -19,20 +18,38 @@ type Sequence struct {
 	rhs   [7]int64
 }
 
-// Atomic increment, if 5 times failed, then call runtime.Gosched().
+// Atomic increment
 func (s *Sequence) Incr() (value int64) {
-	tryIncrTimes := 10
+	times := 10
 	for {
-		tryIncrTimes--
+		times--
 		nextValue := s.Get() + 1
 		ok := atomic.CompareAndSwapInt64(&s.value, s.value, nextValue)
 		if ok {
 			value = nextValue
 			break
 		}
-		time.Sleep(100 * time.Microsecond)
-		if tryIncrTimes < 0 {
-			tryIncrTimes = 10
+		if times <= 0 {
+			times = 10
+			runtime.Gosched()
+		}
+	}
+	return
+}
+
+// Atomic decrement
+func (s *Sequence) Decr() (value int64) {
+	times := 10
+	for {
+		times--
+		preValue := s.Get() - 1
+		ok := atomic.CompareAndSwapInt64(&s.value, s.value, preValue)
+		if ok {
+			value = preValue
+			break
+		}
+		if times <= 0 {
+			times = 10
 			runtime.Gosched()
 		}
 	}

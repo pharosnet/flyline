@@ -9,8 +9,8 @@ import (
 type Buffer interface {
 	// Send item into buffer.
 	Send(i interface{}) (err error)
-	// Recv value from buffer, if closed eq true, then the buffer is closed and no remains.
-	Recv() (value *Value, closed bool, err error)
+	// Recv value from buffer, if active eq false, then the buffer is closed and no remains.
+	Recv() (value *Value, active bool, err error)
 	// Get remains length
 	Len() (length int64)
 	// Close Buffer, when closed, can not send item into buffer, but can recv remains.

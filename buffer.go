@@ -19,6 +19,19 @@ type Buffer interface {
 	Sync(ctx context.Context) (err error)
 }
 
+// Send Filter
+type SendFilter interface {
+	// if return true, item will be sent, if return false, item will be discarded.
+	BeforeSend(i interface{}) (bool)
+}
+
+// Recv Filter
+type RecvFilter interface {
+	// it will be called before Buffer.Recv().s
+	AfterRecv(value *Value, closed bool, err error)
+}
+
+
 var ERR_BUF_SEND_CLOSED error = errors.New("can not send item into the closed buffer")
 var ERR_BUF_RECV_CLOSED error = errors.New("can not recv item from the closed buffer")
 var ERR_BUF_CLOSE_CLOSED error = errors.New("can not close buffer, buffer is closed")

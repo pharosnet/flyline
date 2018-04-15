@@ -31,6 +31,6 @@ type SendFilter interface {
 
 // Recv Filter
 type RecvFilter interface {
-	// it will be called before Buffer.Recv().s
-	AfterRecv(value *Value, closed bool, err error)
+	// it will be called before Buffer.Recv().
+	AfterRecv(value *Value, closed bool)
 }

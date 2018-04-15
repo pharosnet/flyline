@@ -17,5 +17,8 @@ type Buffer interface {
 	Sync(ctx context.Context) (err error)
 }
 
-var ERR_BUF_SEND_CLOSED error = errors.New("cant not send item into the closed buffer")
-var ERR_BUF_RECV_CLOSED error = errors.New("cant not recv item from the closed buffer")
+var ERR_BUF_SEND_CLOSED error = errors.New("can not send item into the closed buffer")
+var ERR_BUF_RECV_CLOSED error = errors.New("can not recv item from the closed buffer")
+var ERR_BUF_CLOSE_CLOSED error = errors.New("can not close buffer, buffer is closed")
+var ERR_BUF_SYNC_UNCLOSED error = errors.New("can not sync buffer, buffer is not closed")
+

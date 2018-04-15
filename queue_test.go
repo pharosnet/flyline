@@ -36,4 +36,5 @@ func TestQueue_multi(t *testing.T)  {
 		wg.Done()
 	}
 	wg.Wait()
+	time.Sleep(500 * time.Millisecond)
 }

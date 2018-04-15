@@ -8,7 +8,7 @@ import (
 // buffer interface
 type Buffer interface {
 	// Send item into buffer.
-	Send(i interface{}) error
+	Send(i interface{}) (err error)
 	// Recv value from buffer, if closed eq true, then the buffer is closed and no remains.
 	Recv() (value *Value, closed bool, err error)
 	// Get remains length

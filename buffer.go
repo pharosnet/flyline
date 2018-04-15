@@ -11,6 +11,8 @@ type Buffer interface {
 	Send(i interface{}) error
 	// Recv value from buffer, if closed eq true, then the buffer is closed and no remains.
 	Recv() (value *Value, closed bool, err error)
+	// Get remains length
+	Len() (length int64)
 	// Close Buffer, when closed, can not send item into buffer, but can recv remains.
 	Close() (err error)
 	// Sync, waiting for remains to be received. Only can be called after Close().

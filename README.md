@@ -58,4 +58,4 @@ Ryougi Nevermore [@ryougi](https://github.com/RyougiNevermore)
 
 ## License
 
-`flyline` source code is available under the MIT [License](/LICENSE).
+`flyline` source code is available under the GPL-3 [License](/LICENSE).

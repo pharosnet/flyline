@@ -23,14 +23,3 @@ type Buffer interface {
 	Sync(ctx context.Context) (err error)
 }
 
-// Send Filter
-type SendFilter interface {
-	// if return true, item will be sent, if return false, item will be discarded.
-	BeforeSend(i interface{}) bool
-}
-
-// Recv Filter
-type RecvFilter interface {
-	// it will be called before Buffer.Recv().
-	AfterRecv(value *Value, closed bool)
-}

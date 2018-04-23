@@ -46,7 +46,8 @@ func (b *queueBuffer) Recv() (value interface{}, active bool) {
 }
 
 func (b *queueBuffer) Len() (length int64) {
-	return b.seq.Get() + 1
+	length = b.seq.Get() + 1
+	return
 }
 
 func (b *queueBuffer) Close() (err error) {

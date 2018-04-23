@@ -46,7 +46,7 @@ func benchmarkFlylineQueueBuffer(N int, validate bool) {
 				break
 			}
 			vInt := int64(-1)
-			v.Scan(&vInt)
+			ValueScan(v, &vInt)
 			if validate {
 				if vInt != int64(i) {
 					panic("out of order")

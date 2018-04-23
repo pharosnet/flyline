@@ -1,15 +1,15 @@
 package flyline
 
 import (
+	"testing"
+	"time"
 	"context"
 	"runtime"
 	"sync"
-	"testing"
-	"time"
 )
 
-func TestNewQueueBuffer(t *testing.T) {
-	buf := NewQueueBuffer()
+func TestNewArrayBuffer(t *testing.T) {
+	buf := NewArrayBuffer(4)
 	t.Logf("new buffer: %v", buf)
 	sendErr := buf.Send(time.Now())
 	if sendErr != nil {
@@ -25,9 +25,9 @@ func TestNewQueueBuffer(t *testing.T) {
 	buf.Sync(context.Background())
 }
 
-func TestQueueBuffer_Sample(t *testing.T) {
+func TestNewArrayBuffer_Sample(t *testing.T) {
 	runtime.GOMAXPROCS(8)
-	buf := NewQueueBuffer()
+	buf := NewArrayBuffer(4)
 	t.Logf("new buffer: %v", buf)
 	wg := new(sync.WaitGroup)
 	wg.Add(1)

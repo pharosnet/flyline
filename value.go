@@ -5,17 +5,12 @@ import (
 	"reflect"
 )
 
-// Value Scanner
-type Value struct {
-	src interface{}
-}
-
 /*
  * Scan value
  * @param dest ptr object
  *
  */
-func (v *Value) Scan(dest interface{}) (err error) {
+func ValueScan(src interface{}, dest interface{}) (err error) {
 	if dest == nil {
 		err = fmt.Errorf("dest is nil, dest = %v", dest)
 		return
@@ -25,7 +20,7 @@ func (v *Value) Scan(dest interface{}) (err error) {
 		err = fmt.Errorf("dest's type is not Ptr, dest = %v", dpv.Kind())
 		return
 	}
-	sv := reflect.ValueOf(v.src)
+	sv := reflect.ValueOf(src)
 	dv := reflect.Indirect(dpv)
 	if sv.Kind() == reflect.Ptr {
 		sv = sv.Elem()

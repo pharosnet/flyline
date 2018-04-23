@@ -2,7 +2,6 @@ package flyline
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 )
@@ -17,26 +16,12 @@ func NewQueueBuffer() Buffer {
 	return b
 }
 
-func NewQueueBufferWithFilters(sendFilters []SendFilter, recvFilters []RecvFilter) Buffer {
-	b := new(queueBuffer)
-	b.seq = NewSequence()
-	b.sts = new(status)
-	b.queue = new(queue)
-	b.mutex = new(sync.Mutex)
-	b.sts.setRunning()
-	b.sendFilters = sendFilters
-	b.recvFilters = recvFilters
-	return b
-}
-
 // Queue Buffer implements Buffer.
 type queueBuffer struct {
 	sts         *status
 	queue       *queue
 	seq         *Sequence
 	mutex       *sync.Mutex
-	sendFilters []SendFilter
-	recvFilters []RecvFilter
 }
 
 func (b *queueBuffer) Send(i interface{}) (err error) {
@@ -45,37 +30,24 @@ func (b *queueBuffer) Send(i interface{}) (err error) {
 		return
 	}
 	b.seq.Incr()
-	if b.sendFilters != nil && len(b.sendFilters) > 0 {
-		for _, filter := range b.sendFilters {
-			if !filter.BeforeSend(i) {
-				err = fmt.Errorf("send failed, item(%v) can not pass filter(%v)", i, filter)
-				b.seq.Decr()
-				return
-			}
-		}
-	}
 	b.queue.add(i)
 	return
 }
 
-func (b *queueBuffer) Recv() (value *Value, active bool) {
+func (b *queueBuffer) Recv() (value interface{}, active bool) {
+	active = true
 	if b.sts.isClosed() && b.Len() == int64(0) {
 		active = false
 		return
 	}
-	active = true
-	value = &Value{src: b.queue.poll()}
+	value = b.queue.poll()
 	b.seq.Decr()
-	if b.recvFilters != nil && len(b.recvFilters) > 0 {
-		for _, filter := range b.recvFilters {
-			filter.AfterRecv(value, active)
-		}
-	}
 	return
 }
 
 func (b *queueBuffer) Len() (length int64) {
-	return b.seq.Get()
+	length = b.seq.Get() + 1
+	return
 }
 
 func (b *queueBuffer) Close() (err error) {

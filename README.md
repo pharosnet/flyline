@@ -23,6 +23,40 @@ This will retrieve the library.
 
 It's easily to use, like standard Go channel.
 
+#### ArrayBuffer (it's better than go channel)
+
+```go
+// buffer.go
+package main
+
+import (
+	"github.com/pharosnet/flyline"
+	"time"
+	"context"
+)
+
+func main() {
+	buf := flyline.NewArrayBuffer(1024*16)
+	buf.Send(time.Now())
+	value, ok := buf.Recv()
+	recvTime := time.Time{}
+	flyline.ValueScan(value, &recvTime)
+	println(recvTime)
+	// close buffer
+	buf.Close()
+	// change ctx to timeout, if sync with timeout. 
+	buf.Sync(context.Background())
+}
+```
+
+```sh
+$ go run buffer.go 
+```
+
+
+
+#### QueueBuffer
+
 ```go
 // buffer.go
 package main
@@ -38,7 +72,7 @@ func main() {
 	buf.Send(time.Now())
 	value, ok := buf.Recv()
 	recvTime := time.Time{}
-	value.Scan(&recvTime)
+	flyline.ValueScan(value, &recvTime)
 	println(recvTime)
 	// close buffer
 	buf.Close()
@@ -49,8 +83,27 @@ func main() {
 
 ```sh
 $ go run buffer.go 
-ping
 ```
+
+Benchmarks
+----------------------------
+Each of the following benchmark tests sends an incrementing sequence message from one goroutine to another. The receiving goroutine asserts that the message is received is the expected incrementing sequence value. Any failures cause a panic. Unless otherwise noted, all tests were run using `GOMAXPROCS=2`.
+
+##### MacBook Pro 13" Retina, Mid 2015
+
+* CPU: `Intel Core i5 @ 2.70 Ghz`
+* Operation System: `OS X 10.13.4`
+* Go Runtime: `Go 1.10.0`
+* Go Architecture: `amd64`
+
+Scenario | Per Operation Time
+-------- | ------------------
+Channels: Buffered, Non-blocking, GOMAXPROCS=1| 19.7 ns/op
+Channels: Buffered, Non-blocking, GOMAXPROCS=2| 21.0 ns/op
+Channels: Buffered, Non-blocking, GOMAXPROCS=3, Contended Write | 87.0 ns/op
+ArrayBuffer: Buffered, Non-blocking, GOMAXPROCS=1| 11.9 ns/op
+ArrayBuffer: Buffered, Non-blocking, GOMAXPROCS=2| 7.14 ns/op
+ArrayBuffer: Buffered, Non-blocking, GOMAXPROCS=3, Contended Write | 11.9 ns/op
 
 ## Contact
 

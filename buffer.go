@@ -14,7 +14,7 @@ type Buffer interface {
 	// Send item into buffer.
 	Send(i interface{}) (err error)
 	// Recv value from buffer, if active eq false, then the buffer is closed and no remains.
-	Recv() (value *Value, active bool)
+	Recv() (value interface{}, active bool)
 	// Get remains length
 	Len() (length int64)
 	// Close Buffer, when closed, can not send item into buffer, but can recv remains.
@@ -23,14 +23,3 @@ type Buffer interface {
 	Sync(ctx context.Context) (err error)
 }
 
-// Send Filter
-type SendFilter interface {
-	// if return true, item will be sent, if return false, item will be discarded.
-	BeforeSend(i interface{}) bool
-}
-
-// Recv Filter
-type RecvFilter interface {
-	// it will be called before Buffer.Recv().
-	AfterRecv(value *Value, closed bool)
-}

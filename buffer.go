@@ -22,4 +22,3 @@ type Buffer interface {
 	// Sync, waiting for remains to be received. Only can be called after Close().
 	Sync(ctx context.Context) (err error)
 }
-

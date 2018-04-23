@@ -1,10 +1,10 @@
 package flyline
 
 import (
+	"fmt"
 	"sync"
 	"testing"
 	"time"
-	"fmt"
 )
 
 func TestFlyline_QueueBuffer(t *testing.T) {

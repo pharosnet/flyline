@@ -18,10 +18,10 @@ func NewQueueBuffer() Buffer {
 
 // Queue Buffer implements Buffer.
 type queueBuffer struct {
-	sts         *status
-	queue       *queue
-	seq         *Sequence
-	mutex       *sync.Mutex
+	sts   *status
+	queue *queue
+	seq   *Sequence
+	mutex *sync.Mutex
 }
 
 func (b *queueBuffer) Send(i interface{}) (err error) {

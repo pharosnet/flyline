@@ -7,7 +7,7 @@ import (
 
 // Sequence New Function, value starts from -1.
 func NewSequence() (seq *Sequence) {
-	seq = &Sequence{lhs: [7]int64{}, value: int64(0), rhs: [7]int64{}}
+	seq = &Sequence{lhs: [7]int64{}, value: int64(-1), rhs: [7]int64{}}
 	return
 }
 

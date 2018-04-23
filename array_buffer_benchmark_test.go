@@ -1,9 +1,9 @@
 package flyline
 
 import (
-	"testing"
-	"runtime"
 	"context"
+	"runtime"
+	"testing"
 )
 
 func BenchmarkArrayBufferOneGoroutine(b *testing.B) {
@@ -23,11 +23,11 @@ func BenchmarkArrayBufferThreeGoroutinesWithContendedWrite(b *testing.B) {
 	benchmarkArrayBuffer(b, 2)
 }
 
-func benchmarkArrayBuffer(b *testing.B, writers int64)  {
+func benchmarkArrayBuffer(b *testing.B, writers int64) {
 	iterations := int64(b.N)
 	maxReads := iterations * writers
 
-	buf := NewArrayBuffer(1024*16)
+	buf := NewArrayBuffer(1024 * 16)
 	b.ReportAllocs()
 	b.ResetTimer()
 	for x := int64(0); x < writers; x++ {
@@ -66,7 +66,7 @@ func BenchmarkNonBlockingThreeGoroutinesWithContendedWrite(b *testing.B) {
 	benchmarkNonBlocking(b, 2)
 }
 
-func benchmarkNonBlocking(b *testing.B, writers int64)  {
+func benchmarkNonBlocking(b *testing.B, writers int64) {
 	iterations := int64(b.N)
 	maxReads := iterations * writers
 	channel := make(chan int64, 1024*16)

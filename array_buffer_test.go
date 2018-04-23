@@ -1,11 +1,11 @@
 package flyline
 
 import (
-	"testing"
-	"time"
 	"context"
 	"runtime"
 	"sync"
+	"testing"
+	"time"
 )
 
 func TestNewArrayBuffer(t *testing.T) {
@@ -27,13 +27,13 @@ func TestNewArrayBuffer(t *testing.T) {
 
 func TestNewArrayBuffer_Sample(t *testing.T) {
 	runtime.GOMAXPROCS(8)
-	buf := NewArrayBuffer(4)
+	buf := NewArrayBuffer(8)
 	t.Logf("new buffer: %v", buf)
 	wg := new(sync.WaitGroup)
 	wg.Add(1)
 	// send
 	go func(buf Buffer, wg *sync.WaitGroup) {
-		for i := 0; i < 10; i++ {
+		for i := 0; i < 10000; i++ {
 			sendErr := buf.Send(time.Now())
 			if sendErr != nil {
 				t.Errorf("send failed, %v", sendErr)

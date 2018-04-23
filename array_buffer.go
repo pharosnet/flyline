@@ -25,16 +25,16 @@ func NewArrayBuffer(capacity int64) Buffer {
 }
 
 type arrayBuffer struct {
-	lhs    [7]int64
-	capacity	int64
-	buffer *array
-	wpSeq  *Sequence
-	wdSeq  *Sequence
-	rpSeq  *Sequence
-	rdSeq  *Sequence
-	sts    *status
-	mutex  *sync.Mutex
-	rhs    [7]int64
+	lhs      [7]int64
+	capacity int64
+	buffer   *array
+	wpSeq    *Sequence
+	wdSeq    *Sequence
+	rpSeq    *Sequence
+	rdSeq    *Sequence
+	sts      *status
+	mutex    *sync.Mutex
+	rhs      [7]int64
 }
 
 func (b *arrayBuffer) Send(i interface{}) (err error) {
@@ -46,11 +46,12 @@ func (b *arrayBuffer) Send(i interface{}) (err error) {
 	times := 10
 	for {
 		times--
-		if next - b.capacity <= b.rdSeq.Get() && next == b.wdSeq.Get()+1 {
+		if next-b.capacity <= b.rdSeq.Get() && next == b.wdSeq.Get()+1 {
 			b.buffer.set(next, i)
 			b.wdSeq.Incr()
 			break
 		}
+		time.Sleep(500 * time.Microsecond)
 		if times <= 0 {
 			runtime.Gosched()
 			times = 10
@@ -73,6 +74,7 @@ func (b *arrayBuffer) Recv() (value interface{}, active bool) {
 			b.rdSeq.Incr()
 			break
 		}
+		time.Sleep(500 * time.Microsecond)
 		if times <= 0 {
 			runtime.Gosched()
 			times = 10

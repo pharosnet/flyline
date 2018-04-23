@@ -19,7 +19,7 @@ func TestNewQueueBuffer(t *testing.T) {
 	t.Logf("send ok, len = %v", buf.Len())
 	v, ok := buf.Recv()
 	recvTime := time.Time{}
-	v.Scan(&recvTime)
+	ValueScan(v, &recvTime)
 	t.Logf("recv: [%v:%v] %v", ok, buf.Len(), recvTime)
 	buf.Close()
 	buf.Sync(context.Background())
@@ -57,7 +57,7 @@ func TestQueueBuffer_Sample(t *testing.T) {
 				break
 			}
 			tt := time.Time{}
-			v.Scan(&tt)
+			ValueScan(v, &tt)
 			t.Logf("recv: %v, %v", ok, tt)
 		}
 	}(buf)

@@ -23,6 +23,8 @@ This will retrieve the library.
 
 It's easily to use, like standard Go channel.
 
+#### QueueBuffer
+
 ```go
 // buffer.go
 package main
@@ -38,7 +40,7 @@ func main() {
 	buf.Send(time.Now())
 	value, ok := buf.Recv()
 	recvTime := time.Time{}
-	value.Scan(&recvTime)
+	flyline.ValueScan(value, &recvTime)
 	println(recvTime)
 	// close buffer
 	buf.Close()
@@ -49,7 +51,6 @@ func main() {
 
 ```sh
 $ go run buffer.go 
-ping
 ```
 
 ## Contact

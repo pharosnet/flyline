@@ -6,7 +6,8 @@ import (
 )
 
 type entry struct {
-	value interface{}
+	value   interface{}
+	padding [7]int64
 }
 
 func newArray(capacity int64) (a *array) {

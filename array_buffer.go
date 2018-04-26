@@ -51,7 +51,7 @@ func (b *arrayBuffer) Send(i interface{}) (err error) {
 			b.wdSeq.Incr()
 			break
 		}
-		time.Sleep(500 * time.Microsecond)
+		time.Sleep(1 * time.Nanosecond)
 		if times <= 0 {
 			runtime.Gosched()
 			times = 10
@@ -74,7 +74,7 @@ func (b *arrayBuffer) Recv() (value interface{}, active bool) {
 			b.rdSeq.Incr()
 			break
 		}
-		time.Sleep(500 * time.Microsecond)
+		time.Sleep(1 * time.Nanosecond)
 		if times <= 0 {
 			runtime.Gosched()
 			times = 10

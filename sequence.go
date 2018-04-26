@@ -1,8 +1,9 @@
 package flyline
 
 import (
-	"runtime"
 	"sync/atomic"
+	"runtime"
+	"time"
 )
 
 // Sequence New Function, value starts from -1.
@@ -29,6 +30,7 @@ func (s *Sequence) Incr() (value int64) {
 			value = nextValue
 			break
 		}
+		time.Sleep(1 * time.Nanosecond)
 		if times <= 0 {
 			times = 10
 			runtime.Gosched()
@@ -48,6 +50,7 @@ func (s *Sequence) Decr() (value int64) {
 			value = preValue
 			break
 		}
+		time.Sleep(1 * time.Nanosecond)
 		if times <= 0 {
 			times = 10
 			runtime.Gosched()

@@ -11,7 +11,7 @@ A flyline buffer works similar to a standard Go channel with the following featu
 
 ### Installing
 
-To start using fastlane, install Go and run `go get`:
+To start using flyline, install Go and run `go get`:
 
 ```sh
 $ go get github.com/pharosnet/flyline

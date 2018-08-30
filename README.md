@@ -100,7 +100,7 @@ Scenario | Per Operation Time
 -------- | ------------------
 Channels: Buffered, Non-blocking, GOMAXPROCS=1| 19.7 ns/op
 Channels: Buffered, Non-blocking, GOMAXPROCS=2| 21.0 ns/op
-Channels: Buffered, Non-blocking, GOMAXPROCS=3, Contended Write | 87.0 ns/op
+Channels: Buffered, Non-blocking, GOMAXPROCS=3, Contended Write | 110.0 ns/op
 ArrayBuffer: Buffered, Non-blocking, GOMAXPROCS=1| 11.9 ns/op
 ArrayBuffer: Buffered, Non-blocking, GOMAXPROCS=2| 7.14 ns/op
 ArrayBuffer: Buffered, Non-blocking, GOMAXPROCS=3, Contended Write | 11.9 ns/op

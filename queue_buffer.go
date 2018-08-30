@@ -79,7 +79,7 @@ func (b *queueBuffer) Sync(ctx context.Context) (err error) {
 				ok = true
 				break
 			}
-			time.Sleep(500 * time.Microsecond)
+			time.Sleep(ms500)
 		}
 		if ok {
 			break

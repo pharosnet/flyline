@@ -6,8 +6,7 @@ import (
 )
 
 type entry struct {
-	value   interface{}
-	padding [7]int64
+	value interface{}
 }
 
 func newArray(capacity int64) (a *array) {
@@ -24,10 +23,9 @@ func newArray(capacity int64) (a *array) {
 	itemBasePtr := uintptr(unsafe.Pointer(&items[0]))
 	itemMSize := unsafe.Sizeof(items[0])
 	for i := int64(0); i < size; i++ {
-		items[i&mask*align] = new(entry)
+		items[i&mask*align] = &entry{}
 	}
 	return &array{
-		lhs:         [7]int64{},
 		capacity:    capacity,
 		size:        size,
 		shift:       shift,
@@ -36,13 +34,11 @@ func newArray(capacity int64) (a *array) {
 		items:       items,
 		itemBasePtr: itemBasePtr,
 		itemMSize:   itemMSize,
-		rhs:         [7]int64{},
 	}
 }
 
 // shared array
 type array struct {
-	lhs         [7]int64
 	capacity    int64
 	size        int64
 	shift       int64
@@ -51,7 +47,6 @@ type array struct {
 	items       []*entry
 	itemBasePtr uintptr
 	itemMSize   uintptr
-	rhs         [7]int64
 }
 
 func (a *array) elementAt(seq int64) (e *entry) {

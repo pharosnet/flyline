@@ -88,15 +88,10 @@ func benchmarkNonBlocking(b *testing.B, writers int64) {
 	}
 
 	for i := int64(0); i < maxReads; i++ {
-		select {
-		case msg := <-channel:
-			if writers == 1 && msg != i {
-				// panic("Out of sequence")
-			}
-		default:
-			continue
-		}
+		<-channel
 	}
 
 	b.StopTimer()
+
+	close(channel)
 }

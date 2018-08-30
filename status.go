@@ -7,9 +7,10 @@ const (
 	status_closed  = int64(0)
 )
 
-// status: running, closeds
+// status: running, closed
 type status struct {
-	v int64
+	v   int64
+	rhs [padding]int64
 }
 
 func (s *status) setRunning() {

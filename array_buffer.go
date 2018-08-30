@@ -9,23 +9,21 @@ import (
 
 // Note: The array capacity must be a power of two, e.g. 2, 4, 8, 16, 32, 64, etc.
 func NewArrayBuffer(capacity int64) Buffer {
-	b := new(arrayBuffer)
-	b.lhs = [7]int64{}
-	b.capacity = capacity
-	b.buffer = newArray(capacity)
-	b.wdSeq = NewSequence()
-	b.wpSeq = NewSequence()
-	b.rdSeq = NewSequence()
-	b.rpSeq = NewSequence()
-	b.sts = new(status)
-	b.mutex = new(sync.Mutex)
-	b.rhs = [7]int64{}
+	b := &arrayBuffer{
+		capacity: capacity,
+		buffer:   newArray(capacity),
+		wdSeq:    NewSequence(),
+		wpSeq:    NewSequence(),
+		rdSeq:    NewSequence(),
+		rpSeq:    NewSequence(),
+		sts:      &status{},
+		mutex:    &sync.Mutex{},
+	}
 	b.sts.setRunning()
 	return b
 }
 
 type arrayBuffer struct {
-	lhs      [7]int64
 	capacity int64
 	buffer   *array
 	wpSeq    *Sequence
@@ -34,7 +32,6 @@ type arrayBuffer struct {
 	rdSeq    *Sequence
 	sts      *status
 	mutex    *sync.Mutex
-	rhs      [7]int64
 }
 
 func (b *arrayBuffer) Send(i interface{}) (err error) {
@@ -51,7 +48,7 @@ func (b *arrayBuffer) Send(i interface{}) (err error) {
 			b.wdSeq.Incr()
 			break
 		}
-		time.Sleep(1 * time.Nanosecond)
+		time.Sleep(ns1)
 		if times <= 0 {
 			runtime.Gosched()
 			times = 10
@@ -74,7 +71,7 @@ func (b *arrayBuffer) Recv() (value interface{}, active bool) {
 			b.rdSeq.Incr()
 			break
 		}
-		time.Sleep(1 * time.Nanosecond)
+		time.Sleep(ns1)
 		if times <= 0 {
 			runtime.Gosched()
 			times = 10
@@ -117,7 +114,7 @@ func (b *arrayBuffer) Sync(ctx context.Context) (err error) {
 				ok = true
 				break
 			}
-			time.Sleep(500 * time.Microsecond)
+			time.Sleep(ms500)
 		}
 		if ok {
 			break

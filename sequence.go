@@ -1,22 +1,25 @@
 package flyline
 
 import (
-	"sync/atomic"
 	"runtime"
+	"sync/atomic"
 	"time"
+)
+
+const (
+	padding = 7
 )
 
 // Sequence New Function, value starts from -1.
 func NewSequence() (seq *Sequence) {
-	seq = &Sequence{lhs: [7]int64{}, value: int64(-1), rhs: [7]int64{}}
+	seq = &Sequence{value: int64(-1)}
 	return
 }
 
 // sequence, atomic operators.
 type Sequence struct {
-	lhs   [7]int64
 	value int64
-	rhs   [7]int64
+	rhs   [padding]int64
 }
 
 // Atomic increment

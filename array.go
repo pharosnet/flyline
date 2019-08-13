@@ -16,9 +16,9 @@ func newArray(capacity int64) (a *array) {
 	}
 	var items []*entry = nil
 	align := int64(unsafe.Alignof(items))
-	mask := int64(capacity - 1)
+	mask := capacity - 1
 	shift := int64(math.Log2(float64(capacity)))
-	size := int64(capacity) * align
+	size := capacity * align
 	items = make([]*entry, size)
 	itemBasePtr := uintptr(unsafe.Pointer(&items[0]))
 	itemMSize := unsafe.Sizeof(items[0])

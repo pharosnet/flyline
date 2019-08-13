@@ -5,9 +5,9 @@ import (
 	"errors"
 )
 
-var ERR_BUF_SEND_CLOSED error = errors.New("can not send item into the closed buffer")
-var ERR_BUF_CLOSE_CLOSED error = errors.New("can not close buffer, buffer is closed")
-var ERR_BUF_SYNC_UNCLOSED error = errors.New("can not sync buffer, buffer is not closed")
+var ErrBufSendClosed = errors.New("can not send item into the closed buffer")
+var ErrBufCloseClosed = errors.New("can not close buffer, buffer is closed")
+var ErrBufSyncUnclosed = errors.New("can not sync buffer, buffer is not closed")
 
 // buffer interface
 type Buffer interface {

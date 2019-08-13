@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	ele_status_empty = int64(0)
-	ele_status_full  = int64(1)
+	eleStatusEmpty = int64(0)
+	eleStatusFull  = int64(1)
 )
 
 // Element of buffer.
@@ -22,30 +22,28 @@ type element struct {
 func (e *element) set(v interface{}) {
 	for {
 		e.lock.Lock()
-		if e.status == ele_status_empty {
+		if e.status == eleStatusEmpty {
 			e.value = v
-			e.status = ele_status_full
+			e.status = eleStatusFull
 			e.lock.Unlock()
 			return
 		}
 		e.lock.Unlock()
 		time.Sleep(200 * time.Microsecond)
 	}
-	return
 }
 
 // get and make status to be empty
 func (e *element) pop() interface{} {
 	for {
 		e.lock.Lock()
-		if e.status == ele_status_full {
+		if e.status == eleStatusFull {
 			v := e.value
-			e.status = ele_status_empty
+			e.status = eleStatusEmpty
 			e.lock.Unlock()
 			return v
 		}
 		e.lock.Unlock()
 		time.Sleep(200 * time.Microsecond)
 	}
-	return nil
 }

@@ -36,14 +36,14 @@ type arrayBuffer struct {
 
 func (b *arrayBuffer) Send(i interface{}) (err error) {
 	if b.sts.isClosed() {
-		err = ERR_BUF_SEND_CLOSED
+		err = ErrBufSendClosed
 		return
 	}
 	next := b.wpSeq.Incr()
 	times := 10
 	for {
 		times--
-		if next-b.capacity <= b.rdSeq.Get() && next == b.wdSeq.Get()+1 {
+		if next-b.capacity-b.rdSeq.Get() <= 0 && next-(b.wdSeq.Get()+1) == 0 {
 			b.buffer.set(next, i)
 			b.wdSeq.Incr()
 			break
@@ -66,7 +66,7 @@ func (b *arrayBuffer) Recv() (value interface{}, active bool) {
 	times := 10
 	next := b.rpSeq.Incr()
 	for {
-		if next <= b.wdSeq.Get() && next == b.rdSeq.Get()+1 {
+		if next-b.wdSeq.Get() <= 0 && next-(b.rdSeq.Get()+1) == 0 {
 			value = b.buffer.get(next)
 			b.rdSeq.Incr()
 			break
@@ -89,7 +89,7 @@ func (b *arrayBuffer) Close() (err error) {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	if b.sts.isClosed() {
-		err = ERR_BUF_CLOSE_CLOSED
+		err = ErrBufCloseClosed
 		return
 	}
 	b.sts.setClosed()
@@ -100,7 +100,7 @@ func (b *arrayBuffer) Sync(ctx context.Context) (err error) {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	if b.sts.isRunning() {
-		err = ERR_BUF_SYNC_UNCLOSED
+		err = ErrBufSyncUnclosed
 		return
 	}
 	for {

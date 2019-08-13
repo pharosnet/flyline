@@ -26,7 +26,7 @@ type queueBuffer struct {
 
 func (b *queueBuffer) Send(i interface{}) (err error) {
 	if b.sts.isClosed() {
-		err = ERR_BUF_SEND_CLOSED
+		err = ErrBufSendClosed
 		return
 	}
 	b.seq.Incr()
@@ -54,7 +54,7 @@ func (b *queueBuffer) Close() (err error) {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	if b.sts.isClosed() {
-		err = ERR_BUF_CLOSE_CLOSED
+		err = ErrBufCloseClosed
 		return
 	}
 	b.sts.setClosed()
@@ -65,7 +65,7 @@ func (b *queueBuffer) Sync(ctx context.Context) (err error) {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	if b.sts.isRunning() {
-		err = ERR_BUF_SYNC_UNCLOSED
+		err = ErrBufSyncUnclosed
 		return
 	}
 	for {
